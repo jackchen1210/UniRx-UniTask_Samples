@@ -9,27 +9,27 @@ namespace Samples.Section2.Observables
         {
             var originalSubject = new Subject<string>();
 
-            //OnNextの内容をスペース区切りで連結し、最後の1つだけを出力するObservable
-            //IConnectableObservable<string>になっている
+            //Observable 將 OnNext 的內容以空格分隔並只輸出最後一個
+            //它是 IConnectableObservable <string>
             IConnectableObservable<string> appendStringObservable =
                 originalSubject
                     .Scan((previous, current) => previous + " " + current)
                     .Last()
-                    .Publish(); //Hot変換するOperator
+                    .Publish(); //轉變為熱資料流
 
 
-            //IConnectableObservable.Connect()を呼び出すと内部でSubscribeの実行が走る
+            //當呼叫IConnectableObservable.Connect()時，Subscribe會在內部進行
             appendStringObservable.Connect();
 
             originalSubject.OnNext("I");
             originalSubject.OnNext("have");
 
-            //appendStringObservableを直接Subscribeすればよい
+            //可以直接訂閱 appendStringObservable
             appendStringObservable.Subscribe(x => Debug.Log(x));
 
             originalSubject.OnNext("a");
             originalSubject.OnNext("pen.");
-            originalSubject.OnCompleted();
+            originalSubject.OnCompleted(); //I have a pen.
         }
     }
 }

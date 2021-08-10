@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Samples.Section2.Operators
 {
     /// <summary>
-    /// メッセージをフィルタリングするサンプル
+    /// 過濾消息的範例
     /// </summary>
     public class OperatorTest : MonoBehaviour
     {
@@ -12,19 +12,19 @@ namespace Samples.Section2.Operators
         {
             var subject = new Subject<int>();
 
-            // そのままSubscribe
+            // 一般訂閱
             subject.Subscribe(x => Debug.Log("raw:" + x));
 
-            // 0以下を除外してSubscribe
+            // 訂閱不包括 0 或更少
             subject.Where(x => x > 0).Subscribe(x => Debug.Log("filter:" + x));
 
-            // メッセージ発行
+            // 推送數值
             subject.OnNext(1);
             subject.OnNext(-1);
             subject.OnNext(3);
             subject.OnNext(0);
 
-            // 終了
+            // 結束
             subject.OnCompleted();
         }
     }

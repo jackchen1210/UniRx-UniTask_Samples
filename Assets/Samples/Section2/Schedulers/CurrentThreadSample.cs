@@ -14,19 +14,17 @@ namespace Samples.Section2.Schedulers
             var subject = new Subject<Unit>();
             subject.AddTo(this);
 
-            subject
-                // OnNextメッセージを現行スレッドにて処理する
-                // つまりそのまま素通しするのと変わらない
-                .ObserveOn(Scheduler.Immediate)
+            // 和當前執行緒處理OnNext消息一樣，就是原樣傳遞。
+            subject.ObserveOn(Scheduler.Immediate)
                 .Subscribe(_ =>
                 {
                     Debug.Log("Thread Id:" + Thread.CurrentThread.ManagedThreadId);
                 });
 
-            // メインスレッドにてOnNext発行
+            // 在主執行緒中發出 OnNext
             subject.OnNext(Unit.Default);
 
-            // 別スレッドからOnNextを発行
+            // 從另一個執行緒發出 OnNext
             Task.Run(() => subject.OnNext(Unit.Default));
         }
     }

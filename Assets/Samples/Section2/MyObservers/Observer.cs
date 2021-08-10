@@ -3,7 +3,7 @@
 namespace Samples.Section2.MyObservers
 {
     /// <summary>
-    /// 受信したメッセージをログに出力するObserver
+    /// 將接收到的消息輸出到日誌的觀察者
     /// </summary>
     class PrintLogObserver<T> : IObserver<T>
     {
@@ -25,21 +25,21 @@ namespace Samples.Section2.MyObservers
 
 
     /// <summary>
-    /// シンプルなObserverインタフェース
+    /// 簡單的觀察者介面
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public interface ISimpleObserver<T>
     {
         /// <summary>
-        /// イベント受信時に呼び出される関数
+        /// 接收到事件時調用的方法
         /// </summary>
-        /// <param name="message">受信したイベントメッセージ</param>
+        /// <param name="message">收到事件消息</param>
         void OnReceiveEvent(T message);
     }
 
 
     /// <summary>
-    /// 受信したメッセージを保持し、後から参照できるObserver
+    /// 持有接收到的消息的觀察者，以後可以引用
     /// </summary>
     class CacheEventObserver<T> : IObserver<T>
     {

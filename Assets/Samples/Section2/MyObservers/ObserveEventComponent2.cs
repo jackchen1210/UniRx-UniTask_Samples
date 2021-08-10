@@ -12,7 +12,7 @@ namespace Samples.Section2.MyObservers
 
         private void Start()
         {
-            // SubjectのSubscribeを呼び出して、observerを登録する
+            // 調用Subject的Subscribe註冊觀察者
             _disposable = _countDownEventProvider
                 .CountDownObservable
                 .Subscribe(
@@ -23,7 +23,7 @@ namespace Samples.Section2.MyObservers
 
         private void OnDestroy()
         {
-            // GameObject破棄時にイベント購読を中断する
+            // 銷毀GameObject時暫停事件訂閱
             _disposable?.Dispose();
         }
     }

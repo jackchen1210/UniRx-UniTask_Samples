@@ -10,7 +10,7 @@ namespace Samples.Section2.Observables
         {
             var subject = new Subject<int>();
 
-            //同じSubjectを3回Subscribe（3つのObservableが生成される）
+            //訂閱同一個主題 3 次（生成 3 個 Observable）
             IDisposable DisposableA = subject
                 .Subscribe(x => Debug.Log("A:" + x)); //A
             IDisposable DisposableB = subject
@@ -18,18 +18,18 @@ namespace Samples.Section2.Observables
             IDisposable DisposableC = subject
                 .Subscribe(x => Debug.Log("C:" + x)); //C
 
-            //値を発行
+            //推送數值
             subject.OnNext(100);
 
-            //AのDisposeを実行する
+            //Dispose A資料流
             DisposableA.Dispose();
 
             Debug.Log("---");
 
-            //再度値を発行
+            //再次推送數值
             subject.OnNext(200);
 
-            //終了（全Observable破棄）
+            //結束（丟棄所有 Observable）
             subject.OnCompleted();
         }
     }

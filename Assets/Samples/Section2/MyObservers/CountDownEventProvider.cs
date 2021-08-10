@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Samples.Section2.MyObservers
 {
     /// <summary>
-    /// 指定秒数カウントしてイベント通知する
+    /// 計算指定的秒數並通知事件
     /// </summary>
     public class CountDownEventProvider : MonoBehaviour
     {
@@ -16,12 +16,12 @@ namespace Samples.Section2.MyObservers
         [SerializeField] private int _countSeconds = 10;
 
         /// <summary>
-        /// Subjectのインスタンス
+        /// 要計數的秒數
         /// </summary>
         private Subject<int> _subject;
 
         /// <summary>
-        /// SubjectのIObservableインタフェース部分のみ公開する
+        /// 只暴露Subject的IObservable接口部分
         /// </summary>
         public IObservable<int> CountDownObservable => _subject;
 
@@ -30,12 +30,12 @@ namespace Samples.Section2.MyObservers
             // Subject生成
             _subject = new Subject<int>();
 
-            // カウントダウンするコルーチン起動
+            // 啟動協程倒數計時
             StartCoroutine(CountCoroutine());
         }
 
         /// <summary>
-        /// 指定秒数カウントし、その都度メッセージを発行するコルーチン
+        /// 計算指定秒數並每次發出一條消息的協程
         /// </summary>
         private IEnumerator CountCoroutine()
         {
@@ -43,20 +43,20 @@ namespace Samples.Section2.MyObservers
 
             while (current > 0)
             {
-                // 現在の値を発行する
+                // 發出當前值
                 _subject.OnNext(current);
                 current--;
                 yield return new WaitForSeconds(1.0f);
             }
 
-            // 最後に0とOnCompletedメッセージを発行する
+            // 最後發出 0 和 OnCompleted 消息
             _subject.OnNext(0);
             _subject.OnCompleted();
         }
 
         private void OnDestroy()
         {
-            // GameObjectが破棄されたらSubjectも解放する
+            // 銷毀GameObject時釋放Subject
             _subject.Dispose();
         }
     }

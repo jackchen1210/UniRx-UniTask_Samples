@@ -8,13 +8,13 @@ namespace Samples.Section2.Schedulers
     {
         void Start()
         {
-            // Unityのコルーチンを用いて3秒計測してくれる（メインスレッドをブロックしない）
+            // 它使用 Unity 的協程測量 3 秒（不阻塞主執行緒）
             Observable
                 .Timer(TimeSpan.FromSeconds(3), Scheduler.MainThread)
                 .Subscribe()
                 .AddTo(this);
 
-            // メインスレッドをThread.Sleepして3秒計測
+            // Thread.Sleep 主執行緒並測量 3 秒
             Observable
                 .Timer(TimeSpan.FromSeconds(3), Scheduler.CurrentThread)
                 .Subscribe()

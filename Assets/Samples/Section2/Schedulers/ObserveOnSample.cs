@@ -9,18 +9,17 @@ namespace Samples.Section2.Schedulers
     {
         private void Start()
         {
-            // ファイルをスレッドプール上で読み込む処理
+            // 在執行緒池上讀取文件的過程
             var task = Task.Run(() => File.ReadAllText(@"data.txt"));
 
-            // Task -> Observable 変換
-            // このときの実行コンテキストはスレッドプールのまま
+            // Task 變換為 Observable
+            // 此時的執行上下文仍然是線程池
             task.ToObservable()
-                // 実行コンテキストをメインスレッドに切り替える
+                // 將執行上下文切換到主執行緒
                 .ObserveOn(Scheduler.MainThread)
                 .Subscribe(x =>
                 {
-                    // ここに到達した時点で実行コンテキストは
-                    // メインスレッドに切り替わっている
+                    // 當你到達這裡時，執行上下文切換到主線程
                     Debug.Log(x);
                 });
         }

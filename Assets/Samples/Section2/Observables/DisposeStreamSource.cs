@@ -6,7 +6,7 @@ namespace Samples.Section2.Observables
 {
     public class DisposeStreamSource : MonoBehaviour
     {
-        //ストリームソースを定義
+        //建立資料流
         private Subject<int> onChangeHpSubject = new Subject<int>();
 
         private IObservable<int> OnChanageHpAsObservable
@@ -20,7 +20,7 @@ namespace Samples.Section2.Observables
         }
 
         /// <summary>
-        /// OnDestroyでReactivePropertyを明示的に破棄する
+        /// 使用 OnDestroy 明確銷毀資料流 
         /// </summary>
         void OnDestroy()
         {

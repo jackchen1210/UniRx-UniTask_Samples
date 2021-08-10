@@ -5,7 +5,7 @@ using UniRx;
 namespace Samples.Section2.MySubjects
 {
     /// <summary>
-    /// 独自実装Subject
+    /// Subject的原始實作
     /// </summary>
     public class MySubject<T> : ISubject<T>, IDisposable
     {
@@ -15,12 +15,12 @@ namespace Samples.Section2.MySubjects
         private readonly object _lockObject = new object();
 
         /// <summary>
-        /// 途中で発生した例外
+        /// 途中發生的異常
         /// </summary>
         private Exception error;
 
         /// <summary>
-        /// 自身を購読しているObserverリスト
+        /// 訂閱自身的觀察者列表
         /// </summary>
         private List<IObserver<T>> observers;
 
@@ -30,7 +30,7 @@ namespace Samples.Section2.MySubjects
         }
 
         /// <summary>
-        /// IObserver.OnNextの実装
+        /// IObserver.OnNext的實作
         /// </summary>
         public void OnNext(T value)
         {
@@ -39,7 +39,7 @@ namespace Samples.Section2.MySubjects
             {
                 ThrowIfDisposed();
 
-                //自身を行動しているObserver全員へメッセージをばらまく
+                //向所有觀察者分發消息
                 foreach (var observer in observers)
                 {
                     observer.OnNext(value);
@@ -48,7 +48,7 @@ namespace Samples.Section2.MySubjects
         }
 
         /// <summary>
-        /// IObserver.OnErrorの実装
+        /// IObserver.OnError的實作
         /// </summary>
         public void OnError(Exception error)
         {
@@ -73,7 +73,7 @@ namespace Samples.Section2.MySubjects
         }
 
         /// <summary>
-        /// IObserver.OnCompletedの実装
+        /// IObserver.OnCompleted的實作
         /// </summary>
         public void OnCompleted()
         {
@@ -96,7 +96,7 @@ namespace Samples.Section2.MySubjects
         }
 
         /// <summary>
-        /// IObservable.Subscribeの実装
+        /// IObservable.Subscribe的實作
         /// </summary>
         public IDisposable Subscribe(IObserver<T> observer)
         {
@@ -104,7 +104,7 @@ namespace Samples.Section2.MySubjects
             {
                 if (IsStopped)
                 {
-                    // 既に動作を終了しているならOnErrorまたはOnCompletedを発行する
+                    // 如果操作已經結束，則發出 OnError 或 OnCompleted
                     if (error != null)
                     {
                         observer.OnError(error);
@@ -117,7 +117,8 @@ namespace Samples.Section2.MySubjects
                     return Disposable.Empty;
                 }
 
-                observers.Add(observer); //リストに追加
+                //添加觀察者到列表中
+                observers.Add(observer);
                 return new Subscription(this, observer);
             }
         }
@@ -128,7 +129,7 @@ namespace Samples.Section2.MySubjects
         }
 
         /// <summary>
-        /// SubscribeのDisposeを実現するために用いるinner class
+        /// 用於實現Subscribe的Dispose
         /// </summary>
         private sealed class Subscription : IDisposable
         {
@@ -143,7 +144,7 @@ namespace Samples.Section2.MySubjects
 
             public void Dispose()
             {
-                // DisposeされたらObserverリストから消去する
+                // Dispose時從觀察者列表中刪除
                 _parent.observers.Remove(_observer);
             }
         }

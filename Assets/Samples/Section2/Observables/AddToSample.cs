@@ -7,10 +7,10 @@ namespace Samples.Section2.Observables
     {
         private void Start()
         {
-            // 5フレームごとにメッセージを発行するObservable
+            // 每 5 幀發出一條消息的 Observable
             Observable.IntervalFrame(5)
                 .Subscribe(_ => Debug.Log("Do!"))
-                // このGameObjectのOnDestroyに連動して自動でDispose()させる
+                // 與此 GameObject 的 OnDestroy 一起自動 Dispose
                 .AddTo(this);
         }
     }

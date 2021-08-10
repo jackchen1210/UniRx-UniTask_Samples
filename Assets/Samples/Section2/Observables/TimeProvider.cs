@@ -7,24 +7,24 @@ namespace Samples.Section2.Observables
     public class PlayerHealth : MonoBehaviour
     {
         /// <summary>
-        /// プレイヤが死亡したことを通知するAsyncSubject
+        /// AsyncSubject 通知玩家已經死亡
         /// </summary>
         public IObservable<Unit> OnPlayerDeadAsync
             => _onPlayerDeadAsyncSubject;
 
         /// <summary>
-        /// プレイヤの死亡通知に利用するストリームソース
+        /// 用於玩家死亡通知的資料流
         /// </summary>
         private readonly AsyncSubject<Unit> _onPlayerDeadAsyncSubject
             = new AsyncSubject<Unit>();
 
         /// <summary>
-        /// プレイヤの体力
+        /// 血量
         /// </summary>
         [SerializeField] private int _health = 10;
 
         /// <summary>
-        /// プレイヤにダメージを与える
+        /// 造成傷害
         /// </summary>
         public void ApplyDamage(int damageValue)
         {
@@ -34,7 +34,7 @@ namespace Samples.Section2.Observables
             {
                 _onPlayerDeadAsyncSubject.OnNext(Unit.Default);
 
-                // OnCompletedを発行することで、
+                // 推送OnCompleted
                 _onPlayerDeadAsyncSubject.OnCompleted();
             }
         }

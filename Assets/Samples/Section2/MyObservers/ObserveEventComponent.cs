@@ -7,24 +7,24 @@ namespace Samples.Section2.MyObservers
     {
         [SerializeField] private CountDownEventProvider _countDownEventProvider;
 
-        // Observerのインスタンス
+        // 觀察者實例
         private PrintLogObserver<int> _printLogObserver;
 
         private IDisposable _disposable;
 
         private void Start()
         {
-            // PrintLogObserverインスタンスを作成
+            // 創建一個 PrintLogObserver 實例
             _printLogObserver = new PrintLogObserver<int>();
 
-            // SubjectのSubscribeを呼び出して、observerを登録する
+            // 調用Subject的Subscribe註冊觀察者
             _disposable = _countDownEventProvider
                 .CountDownObservable.Subscribe(_printLogObserver);
         }
 
         private void OnDestroy()
         {
-            // GameObject破棄時にイベント購読を中断する
+            // 銷毀GameObject時暫停事件訂閱
             _disposable?.Dispose();
         }
     }

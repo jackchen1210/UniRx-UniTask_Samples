@@ -10,16 +10,19 @@ namespace Samples.Section1
     public class DownloadTexture : MonoBehaviour
     {
         /// <summary>
-        /// uGUIのRawImage
+        /// uGUI的RawImage
         /// </summary>
         [SerializeField] private RawImage _rawImage;
+        /// <summary>
+        /// 要顯示的圖像路徑
+        /// </summary>
+        [SerializeField] private string uri;
 
         private void Start()
         {
-            var uri = "<表示したい画像へのアドレス>";
 
-            // テクスチャを取得する
-            // ただし例外発生時は計3回まで試行する
+            // 獲得紋理
+            // 但是如果發生異常，最多嘗試 3 次。
             GetTextureAsync(uri)
                 .OnErrorRetry(
                     onError: (Exception _) => { },
@@ -31,7 +34,7 @@ namespace Samples.Section1
         }
 
         /// <summary>
-        /// コルーチンを起動して、その結果をObservableで返す
+        /// 調用協程並將結果作為 Observable 返回
         /// </summary>
         private IObservable<Texture> GetTextureAsync(string uri)
         {
@@ -41,9 +44,9 @@ namespace Samples.Section1
                     return GetTextureCoroutine(observer, uri);
                 });
         }
-    
+
         /// <summary>
-        /// コルーチンでテクスチャをダウンロードする
+        /// 使用協程下載紋理
         /// </summary>
         private IEnumerator GetTextureCoroutine(IObserver<Texture> observer, string uri)
         {
@@ -52,13 +55,13 @@ namespace Samples.Section1
                 yield return uwr.SendWebRequest();
                 if (uwr.isNetworkError || uwr.isHttpError)
                 {
-                    // エラーが起きたらOnErrorメッセージを発行する
+                    // 如果發生錯誤，則發出 OnError 消息
                     observer.OnError(new Exception(uwr.error));
                     yield break;
                 }
 
                 var result = ((DownloadHandlerTexture) uwr.downloadHandler).texture;
-                // 成功したらOnNext/OnCompletedメッセージを発行する
+                // 成功時發出 OnNext / OnCompleted 消息
                 observer.OnNext(result);
                 observer.OnCompleted();
             }

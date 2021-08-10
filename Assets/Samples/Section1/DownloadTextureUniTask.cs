@@ -10,19 +10,19 @@ using UnityEngine.UI;
 namespace Samples.Section1.Async
 {
     /// <summary>
-    /// 指定のURIからテクスチャをダウンロードして
-    /// RawImageに設定する
+    ///從指定的 URI 下載紋理並將其設置為 RawImage
     /// </summary>
     public class DownloadTextureUniTask : MonoBehaviour
     {
         [SerializeField] private RawImage _rawImage;
+        [SerializeField] private string uri;
 
         private void Start()
         {
-            // このGameObjectに紐付いたCancellationTokenを取得
+            // 獲取與此 GameObject 關聯的 CancellationToken
             var token = this.GetCancellationTokenOnDestroy();
 
-            // テクスチャのセットアップを実行
+            // 執行紋理設置
             SetupTextureAsync(token).Forget();
         }
 
@@ -30,9 +30,8 @@ namespace Samples.Section1.Async
         {
             try
             {
-                var uri = "<表示したい画像へのアドレス>";
 
-                // UniRxのRetryを使いたいので、UniTaskからObservableへ変換する
+                // 我想使用 UniRx 的 Retry，所以從 UniTask 轉換為 Observable
                 var observable = Observable
                     .Defer(() =>
                     {
@@ -42,7 +41,7 @@ namespace Samples.Section1.Async
                     })
                     .Retry(3);
 
-                // Observableもawaitで待受が可能
+                // Observable 也可以使用 await
                 var texture = await observable;
 
                 _rawImage.texture = texture;
@@ -55,8 +54,7 @@ namespace Samples.Section1.Async
 
 
         /// <summary>
-        /// コルーチンの代わりにasync/awaitを利用する
-        /// 結果は UniTask<Texture> になる
+        /// 使用async/await代替協程的結果是UniTask <Texture>
         /// </summary>
         private async UniTask<Texture> GetTextureAsync(
             string uri,
@@ -65,9 +63,11 @@ namespace Samples.Section1.Async
             using (var uwr = UnityWebRequestTexture.GetTexture(uri))
             {
                 await uwr.SendWebRequest().WithCancellation(token);
-                if (uwr.isNetworkError || uwr.isHttpError)
+                if (uwr.result == UnityWebRequest.Result.ConnectionError
+                    || uwr.result == UnityWebRequest.Result.DataProcessingError
+                    || uwr.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    // 失敗時は例外を発行する
+                    // 失敗時發出異常
                     throw new Exception(uwr.error);
                 }
 
