@@ -1,5 +1,5 @@
 # 概要/Summary
-
+此為中文翻譯文件，翻譯至原Repo.  
 [UniRx/UniTask完全理解](https://asciidwango.jp/post/631460628113014785/unirxunitask%E5%AE%8C%E5%85%A8%E7%90%86%E8%A7%A3)で用いたサンプルコード集です。  
 This is a collection of sample code used in [UniRx/UniTask完全理解](https://asciidwango.jp/post/631460628113014785/unirxunitask%E5%AE%8C%E5%85%A8%E7%90%86%E8%A7%A3).
 
