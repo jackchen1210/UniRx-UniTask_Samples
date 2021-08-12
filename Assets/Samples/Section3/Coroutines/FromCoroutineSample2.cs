@@ -10,7 +10,7 @@ namespace Samples.Section3.Coroutines
     {
         private void Start()
         {
-            // CancellationTokenを利用する場合
+            // 使用 CancellationToken 
             Observable
                 .FromCoroutine(token => WaitingCoroutine(token))
                 .Subscribe(
@@ -19,15 +19,14 @@ namespace Samples.Section3.Coroutines
                 .AddTo(this);
         }
 
-        // CancellationTokenをうけとる
+        // 接受CancellationToken
         private IEnumerator WaitingCoroutine(CancellationToken token)
         {
             Debug.Log("Coroutine start.");
 
-            // Observableをコルーチンとして待受ける場合、
-            // このコルーチンが停止したタイミングで
-            // yield returnで待ち受けているObservableも止まってほしい
-            // そのためにCancellationTokenを用いる
+            //當作為協程等待 Observable 時，
+            //我希望 Observable 在這個協程停止時等待並返回停止。
+            //因此使用 CancellationToken。
             yield return Observable
                 .Timer(TimeSpan.FromSeconds(3))
                 .ToYieldInstruction(token);

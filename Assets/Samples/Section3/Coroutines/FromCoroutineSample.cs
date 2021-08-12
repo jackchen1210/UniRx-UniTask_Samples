@@ -8,24 +8,24 @@ namespace Samples.Section3.Coroutines
     {
         private void Start()
         {
-            // コルーチンの終了をObservableで待ち受ける
+            // Observable 等待協程結束
             Observable.FromCoroutine(WaitingCoroutine, publishEveryYield: false)
                 .Subscribe(
                     _ => Debug.Log("OnNext"), 
                     () => Debug.Log("OnCompleted"))
                 .AddTo(this);
 
-            // ToObservable() という省略記法もある
+            // 還有一個縮寫叫做ToObservable()
             //WaitingCoroutine().ToObservable()
             //    .Subscribe();
         }
 
-        // 3秒待つだけのコルーチン
+        // 只等待 3 秒的協程
         private IEnumerator WaitingCoroutine()
         {
             Debug.Log("Coroutine start.");
 
-            //3秒間待機
+            //等待 3 秒
             yield return new WaitForSeconds(3);
 
             Debug.Log("Coroutine finish.");

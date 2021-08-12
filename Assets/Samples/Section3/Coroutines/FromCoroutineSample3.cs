@@ -8,22 +8,22 @@ namespace Samples.Section3.Coroutines
     public class FromCoroutineSample3 : MonoBehaviour
     {
         /// <summary>
-        /// 長押し判定のしきい値
+        /// 長按判斷閾值
         /// </summary>
         private readonly float _longPressThresholdSeconds = 1.0f;
 
         private void Start()
         {
-            // 一定時間の長押しを検知するObservable
+            // Observable 檢測一段時間內的長按
             Observable.FromCoroutine<bool>(observer => LongPushCoroutine(observer))
-                .DistinctUntilChanged() //連続して重複したメッセージを除去
+                .DistinctUntilChanged() //刪除連續重複的消息
                 .Subscribe(x => Debug.Log(x)).AddTo(this);
         }
 
         /// <summary>
-        /// スペースキーの長押しを検知するコルーチン
-        /// 一定時間長押しされていたらTrueを返す
-        /// キーが離されたらFalseを返す
+        /// 檢測長按空格鍵的協程
+        /// 如果按住一段時間返回 True
+        /// 釋放鍵時返回False
         /// </summary>
         private IEnumerator LongPushCoroutine(IObserver<bool> observer)
         {
@@ -36,13 +36,13 @@ namespace Samples.Section3.Coroutines
                 {
                     if (!isPushed)
                     {
-                        //押された直後の時刻を記憶
+                        //按下後立即記住時間
                         lastPushTime = Time.time;
                         isPushed = true;
                     }
                     else if (Time.time - lastPushTime > _longPressThresholdSeconds)
                     {
-                        //一定時間押されているならTrueを発行
+                        //如果按下一段時間，則發出 True
                         observer.OnNext(true);
                     }
                 }
@@ -50,7 +50,7 @@ namespace Samples.Section3.Coroutines
                 {
                     if (isPushed)
                     {
-                        //離されたらFalseを発行
+                        //發佈時發出 False
                         observer.OnNext(false);
                         isPushed = false;
                     }

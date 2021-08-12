@@ -8,22 +8,23 @@ namespace Samples.Section3.Coroutines
     {
         private void Start()
         {
-            // FromCoroutineで変換
+            // 使用 FromCoroutine 轉換
             Observable
                 .FromCoroutine(() => WaitingCoroutine(5))
                 .Subscribe();
 
-            // 対象のコルーチンが yield return null しか使っていないなら、
-            // より軽量な　FromMicroCoroutine　が利用可能
+            //如果目標協程只使用了yield return null，
+            //則可以使用更輕的FromMicroCoroutine
             Observable
                 .FromMicroCoroutine(() => WaitingCoroutine(5))
                 .Subscribe();
         }
 
-        // 指定秒数待機するコルーチン
+
+        //等待指定秒數的協程
         private IEnumerator WaitingCoroutine(float seconds)
         {
-            // あえてWaitForSecondsを利用しない
+            //不敢用WaitForSeconds
             var start = Time.time;
             while (Time.time - start <= seconds)
             {

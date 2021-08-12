@@ -14,34 +14,34 @@ namespace Samples.Section3.Coroutines
         }
 
         /// <summary>
-        /// Fileの非同期読み込みをコルーチンで待ち受ける
+        /// 使用協程等待異步讀取文件
         /// </summary>
         private IEnumerator ReadFileCoroutine()
         {
-            // ファイルの非同期読み込みをYieldInstructionに変換する
-            // throwOnErrorにfalseを指定すると、
-            // 失敗時の例外を保持してくれるようになる
-            // (trueの場合は例外がそのままthrowされる）
+            // 將文件的異步讀取轉換為 YieldInstruction
+            // 如果你為 throwOnError 指定了 false，
+            // 失敗時將保持異常
+            // (如果為真，異常將按原樣拋出）
             var yi = ReadFileAsync(@"data.txt")
                 .ToYieldInstruction(throwOnError: false);
 
-            // 待機
+            // 等待完成
             yield return yi;
 
-            if (yi.HasError) //HasErrorで成否の判定ができる
+            if (yi.HasError) //你可以用 HasError 判斷成功或失敗
             {
-                // OnError時のExceptionはErrorに格納される
+                //OnError 異常儲存在 Error 中
                 Debug.LogError(yi.Error);
             }
             else
             {
-                // 成功時の結果はResultに格納される
+                // 成功的結果儲存在 Result
                 Debug.Log(yi.Result);
             }
         }
 
         /// <summary>
-        /// 非同期でファイルを読み込むIObservableを作成する
+        /// 創建一個異步讀取文件的 IObservable
         /// </summary>
         private IObservable<string> ReadFileAsync(string path)
         {

@@ -16,7 +16,7 @@ namespace Samples.Section3.Coroutines
         {
             Debug.Log("Coroutine start:" + Time.time);
 
-            // Observableをコルーチンに変換する
+            //將 Observable 轉換為協程
             yield return Observable
                 .Timer(TimeSpan.FromSeconds(1))
                 .ToYieldInstruction();

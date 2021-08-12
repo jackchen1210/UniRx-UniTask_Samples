@@ -7,16 +7,17 @@ namespace Samples.Section3.FactoryMethods
     {
         private void Start()
         {
-            // 「乱数を返すObservable」をSubscribe()されるたびに生成する
+            // 每次 Subscribe() 完成時生成“返回隨機數的 Observable”
             var rand = Observable.Defer(() =>
             {
-                // 乱数を用意
+                //產生亂數
                 var randomValue = UnityEngine.Random.Range(0, 100);
-                // 乱数を返すObservable
+                // 返回隨機數的 Observable
                 return Observable.Return(randomValue);
             });
+            
 
-            // 複数回Subscribe()
+            // 多次呼叫Subscribe()
             rand.Subscribe(x => Debug.Log(x));
             rand.Subscribe(x => Debug.Log(x));
             rand.Subscribe(x => Debug.Log(x));

@@ -9,36 +9,35 @@ namespace Samples.Section3.FactoryMethods
     {
         private void Start()
         {
-            //'A'から始まるアルファベットを一定時間ごとに順番に生成する
+            //每隔一秒生成以“A”開頭的字母
             var observable = Observable.Create<char>(observer =>
             {
-                // IDisposableとCancellationTokenがくっついたオブジェクト
-                // Dispose()されるとキャンセル状態になる
+                // 帶有 IDisposable 和 CancellationToken 的對象
+                // 當Dispose()完成後，會處於取消狀態
                 var disposable = new CancellationDisposable();
 
-                // スレッドプール上で実行する
+                // 在執行緒池上運行
                 Task.Run(async () =>
                 {
-                    // 'A' - 'Z' までのアルファベットを発行する
+                    // 將字母排列 'A' - 'Z'
                     for (var i = 0; i < 26; i++)
                     {
-                        // 1秒待つ
+                        // 等待一秒
                         await Task.Delay(TimeSpan.FromSeconds(1), disposable.Token);
 
-                        // 文字を発行
+                        // 發布字元消息
                         observer.OnNext((char) ('A' + i));
                     }
 
-                    // すべて完了したのでOnCompletedメッセージを発行する
+                    //發出 OnCompleted 消息，因為一切都已完成
                     observer.OnCompleted();
                 }, disposable.Token);
-
-                // Subscribe()が中断されたら連動して
-                // CancellationTokenもキャンセル状態になる
+                // 如果 Subscribe() 被中斷，它會一起工作
+                // CancellationToken 也會被取消
                 return disposable;
             });
 
-            // Observableを生成して購読
+            //生成並訂閱 Observable
             observable.Subscribe(
                 x => Debug.Log("OnNext:" + x),
                 ex => Debug.LogError("OnError:" + ex.Message),
